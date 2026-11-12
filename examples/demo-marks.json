@@ -1,0 +1,17 @@
+{
+  "highlights": [
+    { "measure": 1, "staff": 1, "note": 2, "label": "经过音", "color": "orange", "foreground": "orange", "opacity": 0.39 },
+    { "measure": 2, "label": "预属小节", "color": "purple" },
+    { "measures": [3, 4], "label": "属到主的解决", "color": "green", "opacity": 0.20 },
+    { "measure": 3, "staff": 1, "note": 3, "label": "解决声部", "foreground": "green", "opacity": 0 },
+    { "measure": 3, "staff": 1, "note": 4, "label": "解决声部", "foreground": "green", "opacity": 0 },
+    { "measure": 4, "staff": 1, "note": 1, "label": "解决声部", "foreground": "green", "opacity": 0 },
+    { "measure": 4, "staff": 1, "note": 2, "label": "解决声部", "foreground": "green", "opacity": 0 }
+  ],
+  "measureDetails": {
+    "1": "第 1 小节 · I。弱拍上的 D5 级进连接 C5 与 E5，是经过音。",
+    "2": "第 2 小节 · ii⁶。D 小三和弦以 F 为低音，起预属作用。",
+    "3": "第 3 小节 · V⁷。和弦七音 F5 与导音 B4 分别向 E5 和 C5 解决。",
+    "4": "第 4 小节 · I。F5 下行到 E5，B4 上行到 C5，完成属到主的解决。"
+  }
+}

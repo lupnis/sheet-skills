@@ -1,0 +1,29 @@
+# Dependencies and npm diagnostics
+node_modules/
+.npm/
+npm-debug.log*
+*.log
+
+# Local scores and generated previews
+out/
+dist/
+private-scores/
+demo.html
+*.mid
+*.midi
+*.mscz
+*.mscx
+*.mxl
+
+# Local configuration and copies installed for development
+/.agents/skills/
+.env
+.env.*
+!.env.example
+
+# Editor and OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.swp
+.idea/

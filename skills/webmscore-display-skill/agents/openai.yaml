@@ -1,0 +1,4 @@
+interface:
+  display_name: "WebMuseScore Display"
+  short_description: "Render scores with WebMuseScore WASM"
+  default_prompt: "Use $webmscore-display-skill to render this score for comparison in Codex."

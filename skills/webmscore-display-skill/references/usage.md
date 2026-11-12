@@ -1,0 +1,41 @@
+# webmscore rendering and annotation
+
+From the skill directory, pass a score and an output path to the renderer. Omit `--standalone` to generate an inline fragment.
+
+```sh
+node scripts/render.mjs score.musicxml --systems-per-view 1 --max-height 400 --out preview.html --standalone
+```
+
+| Option | Effect |
+| --- | --- |
+| `--pages 2-3` | Include these pages after engraving. |
+| `--measures 3-4` | Crop the selected measures from the engraved layout. Crops across systems are navigated in order. A crop that starts mid-system can start without a clef or key signature. |
+| `--page-width 2100` | Set paper width in tenths of a millimeter (210 mm here) and recompute the layout. |
+| `--page-height 1900` | Set paper height in tenths of a millimeter (190 mm here) and recompute pagination. |
+| `--systems-per-view 1` | Show up to this many original systems per screen. A system is one horizontal row containing the staves of the instruments. |
+| `--measures-per-view 2` | Show up to this many measures per screen within each original system. Shorter views keep the scale of the original page. |
+| `--max-width 720` | Limit the displayed score width in CSS pixels. The score also fits narrower windows. |
+| `--max-height 400` | Limit the displayed score height in CSS pixels. The preview scales proportionally to fit. |
+| `--annotations file.json` | Apply the optional presentation below. |
+| `--standalone` | Write a complete HTML page. |
+
+The renderer applies optional paper dimensions to an in-memory MuseScore copy. It then selects pages and measures, crops the engraved score into views, and applies the display caps. Use one of the two view options at a time. A single system can exceed the paper height when it contains many staves. Use `--systems-per-view 1 --max-height 400` to keep the entire system visible within the height limit.
+
+Inputs include MuseScore MSCZ and MSCX, MusicXML and MXL, and MIDI. A MIDI import uses the engine's transcription and quantization. MuseScore 4.0.0 may render newer score features differently. Long scores may need a smaller `--pages` range for inline display. The preview uses embedded engraving vectors and omits SVG images.
+
+## Annotation configuration
+
+```json
+{
+  "highlights": [
+    { "measure": 1, "staff": 1, "note": 2, "label": "Passing tone", "color": "orange", "foreground": "orange" },
+    { "measures": [3, 4], "label": "Cadence", "color": "green" }
+  ],
+  "measureDetails": { "3": "V7 resolves in the next measure." }
+}
+```
+
+- Use `measure` or an inclusive `measures` pair, counting the original score from 1. Use `note` within a measure to target a notehead. Notes sort by rendered position left to right, then top to bottom at the same position. A chord contributes individual noteheads.
+- `staff` optionally limits a note target to the specified staff, counting from the top. The SVG export provides independent note shapes. The preview uses measure coordinates and staff line geometry to locate them. Verify targets in cross-staff, tablature, or visually dense passages. Direct source IDs, independent stems and beams are outside this adapter's annotation support.
+- `color` and `opacity` apply to the rectangle. `foreground` changes a selected notehead's paint. Use `opacity: 0` for foreground only. Color values accept six-digit hex or a theme color from `orange`, `purple`, `green`, `blue`, `red`, and `yellow`.
+- Set `title`, `showLegend: true`, or `showToggles: true` when useful. Use `measureDetails` to add text revealed when a measure is selected.

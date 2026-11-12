@@ -1,0 +1,32 @@
+name: Render smoke checks
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        skill: [sheet-display-skill, webmscore-display-skill]
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: skills/${{ matrix.skill }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - name: Install locked dependencies
+        run: npm ci --ignore-scripts
+      - name: Render an inline preview
+        run: node scripts/render.mjs ../../examples/demo.musicxml --annotations ../../examples/demo-marks.json --max-width 500 --out ../../out/${{ matrix.skill }}-inline.html
+      - name: Render a standalone preview
+        run: node scripts/render.mjs ../../examples/demo.musicxml --annotations ../../examples/demo-marks.json --max-width 500 --out ../../out/${{ matrix.skill }}-standalone.html --standalone

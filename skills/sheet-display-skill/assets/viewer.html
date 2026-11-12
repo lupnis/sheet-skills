@@ -1,0 +1,59 @@
+<section id="__SHEET_ROOT__" class="sheet-view" aria-label="五线谱">
+  <h2 data-title hidden></h2>
+  <nav class="viz-row sheet-controls" aria-label="谱页" data-navigation hidden>
+    <button class="btn" type="button" data-previous>上一页</button>
+    <span data-page-label class="tabular-nums" aria-live="polite"></span>
+    <button class="btn" type="button" data-next>下一页</button>
+  </nav>
+  <div class="viz-row sheet-controls" data-legend hidden></div>
+  <div data-score></div>
+  <output data-detail class="text-small sheet-detail" aria-live="polite"></output>
+  <output data-warning class="text-small sheet-detail" aria-live="polite"></output>
+  <script type="application/json" data-engraving><!--SCORE_DATA--></script>
+</section>
+<style>
+  /*FONT_CSS*/
+  #__SHEET_ROOT__ {
+    color: var(--foreground, CanvasText);
+    --sheet-orange: var(--orange, #d75510);
+    --sheet-purple: var(--purple, #8950c9);
+    --sheet-green: var(--green, #13804a);
+    --sheet-blue: var(--blue, #266bcc);
+    --sheet-red: var(--red, #bd3a3a);
+    --sheet-yellow: var(--yellow, #be910a);
+  }
+  #__SHEET_ROOT__ h2 { margin: 0 0 0.5em; }
+  #__SHEET_ROOT__ .sheet-controls {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5em;
+    margin-block-end: 0.5em;
+  }
+  #__SHEET_ROOT__ [hidden] { display: none; }
+  #__SHEET_ROOT__ [data-score] > svg { display: block; width: 100%; height: auto; }
+  #__SHEET_ROOT__ .definition-scale { color: inherit; overflow: visible; }
+  #__SHEET_ROOT__ .engraving-verovio :is(path, polygon, polyline, line, ellipse, rect) { stroke: currentColor; }
+  #__SHEET_ROOT__ .engraving-verovio :is(.ending, .fing, .reh, .tempo) { font-weight: 500; }
+  #__SHEET_ROOT__ .engraving-verovio :is(.dir, .dynam, .mNum) { font-style: italic; }
+  #__SHEET_ROOT__ .engraving-verovio .placeholder { visibility: hidden; }
+  #__SHEET_ROOT__ svg .sheet-highlight { pointer-events: none; stroke: none; }
+  #__SHEET_ROOT__ svg .sheet-measure-target rect { fill: transparent; stroke: none; }
+  #__SHEET_ROOT__ svg .sheet-measure-target:focus-visible rect {
+    stroke: var(--ring, Highlight);
+    stroke-width: 2px;
+    vector-effect: non-scaling-stroke;
+  }
+  #__SHEET_ROOT__ .sheet-detail:not(:empty) { display: block; margin-block-start: 0.35em; }
+  #__SHEET_ROOT__ .sheet-detail:empty { display: none; }
+  #__SHEET_ROOT__ .sheet-swatch {
+    display: inline-block;
+    width: 0.8em;
+    height: 0.62em;
+    border-radius: 0.1em;
+    margin-inline-end: 0.35em;
+  }
+</style>
+<script>
+<!--VIEWER_SCRIPT-->
+</script>

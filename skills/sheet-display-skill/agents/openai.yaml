@@ -1,0 +1,4 @@
+interface:
+  display_name: "Sheet Display"
+  short_description: "Render and annotate scores in Codex"
+  default_prompt: "Use $sheet-display-skill to show the score in Codex and highlight the requested passage."

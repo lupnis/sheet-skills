@@ -1,0 +1,15 @@
+{
+  "name": "webmscore-display-skill",
+  "version": "0.1.0",
+  "private": true,
+  "license": "GPL-3.0-only",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@xmldom/xmldom": "0.9.12",
+    "fflate": "0.8.3",
+    "webmscore": "1.2.1"
+  }
+}
