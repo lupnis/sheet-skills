@@ -1,6 +1,6 @@
 # Sheet Skills
 
-Two independent Codex skills for displaying and annotating staff notation. Both use WebAssembly for engraving and can produce interactive previews for Codex Desktop or standalone HTML for offline viewing.
+Two independent Codex skills that render interactive sheet music directly in the Codex Desktop conversation by default. Both use WebAssembly for engraving and support standalone HTML export on request.
 
 ![Four measures of a piano score with colored noteheads and rectangular highlights](docs/demo-preview.png)
 
@@ -29,7 +29,7 @@ From a local checkout, you can copy either complete directory under `skills/` in
 
 ## Use in Codex
 
-Provide a score path, choose a skill, and describe the passage and presentation you want:
+Provide a score path, choose a skill, and describe the passage you want to see. The skill displays the score inline, with pagination and selectable analysis when applicable.
 
 > Use $sheet-display-skill to display measures 5–8 from this MusicXML file. Highlight the cadence and show its analysis when I select measure 8.
 
@@ -40,7 +40,7 @@ Both skills let Codex choose a display width and adjust engraving dimensions. Fo
 - [Verovio rendering and annotation reference](skills/sheet-display-skill/references/usage.md)
 - [webmscore rendering and annotation reference](skills/webmscore-display-skill/references/usage.md)
 
-## Run the shared example
+## Run the shared example in a browser
 
 Use Node.js 20 or later. Run these commands from the repository root. On Windows, use `npm.cmd` if PowerShell blocks `npm.ps1`.
 

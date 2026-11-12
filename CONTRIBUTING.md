@@ -4,7 +4,7 @@ When reporting a problem, include the skill name, operating system, Node.js vers
 
 ## Verify changes
 
-- Run both renderers using the [shared example](README.md#run-the-shared-example). Open the preview and select a measure to verify that its analysis appears. Use a shareable multipage score when testing pagination.
+- Run both renderers using the [shared example](README.md#run-the-shared-example-in-a-browser). Open the preview and select a measure to verify that its analysis appears. Use a shareable multipage score when testing pagination.
 - For shared viewer behavior, check the `assets/viewer.html` and `assets/viewer.js` in both skill directories. Each skill directory is installed independently.
 - For layout changes, check short excerpts, range highlights across systems, and dense notation in a narrow window. Verify foreground coloring and translucent highlights independently.
 - Record the source and redistribution terms for added scores. Store private scores in `private-scores/` and generated previews in `out/`.

@@ -1,9 +1,9 @@
 # Verovio rendering and annotation
 
-From the skill directory, pass a score and an output path to the renderer. Omit `--standalone` to generate an inline fragment.
+For Codex Desktop, generate a fragment and embed it in the conversation using the content reference in `SKILL.md`. Set `--out` to a task-owned visualization path.
 
 ```sh
-node scripts/render.mjs score.musicxml --max-width 500 --out preview.html --standalone
+node scripts/render.mjs score.musicxml --max-width 500 --out "<visualization-directory>/score.html"
 ```
 
 | Option | Effect |
@@ -14,7 +14,7 @@ node scripts/render.mjs score.musicxml --max-width 500 --out preview.html --stan
 | `--page-height 1000` | Set Verovio's layout height. A shorter layout generally fits fewer systems on a page. |
 | `--max-width 720` | Limit the displayed score width in CSS pixels. |
 | `--annotations file.json` | Apply the optional view configuration below. |
-| `--standalone` | Write a complete offline HTML page for a browser. |
+| `--standalone` | Export a complete offline HTML page when requested. |
 
 The layout dimensions are Verovio units and default to 1250 × 1550. The number of measures per system depends on the music. The final SVG trims unused page height to fit the content.
 
@@ -37,4 +37,4 @@ Inputs include MEI, MusicXML, single-root-file compressed MusicXML (MXL), and AB
 - The default component of a note is `notehead`. You can select `stem`, `beam`, or `element`. An ID can also target an existing rendered slur, text, or ornament. IDs from MEI are the most reliable across layout changes. MusicXML import can change IDs.
 - The rectangle uses `color` and `opacity`. Set `opacity: 0` for foreground-only styling. Set `foreground` to recolor a targeted glyph. Colors accept six-digit hex values or theme-aware `orange`, `purple`, `green`, `blue`, `red`, and `yellow`.
 - Provide `title`, `showLegend: true`, or `showToggles: true` when they serve the presentation. The optional toggles change only presentation. `measureDetails` adds selectable regions to the specified measures. The text appears after selecting a measure.
-- Long scores can exceed Codex's inline size limit. Request fewer pages per preview or use standalone mode for a complete local view.
+- Long scores can exceed Codex's inline size limit. Split the requested pages across inline previews.
