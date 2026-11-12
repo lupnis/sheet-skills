@@ -1,6 +1,10 @@
 # Sheet Skills
 
-Two independent Codex skills that render interactive sheet music directly in the Codex Desktop conversation by default. Both use WebAssembly for engraving and support standalone HTML export on request.
+## Introduction
+
+Sheet Skills provides two Codex skills for embedded score rendering in Codex Desktop. Read full score pages or short passages directly in the conversation, and use highlights and clickable measure annotations to analyze the music.
+
+The skills use Verovio and webmscore for WebAssembly engraving. Both support standalone HTML export on request.
 
 ![Four measures of a piano score with colored noteheads and rectangular highlights](docs/demo-preview.png)
 
@@ -57,3 +61,7 @@ Open either output in a browser and select a measure to see the analysis.
 ## Contributing and license
 
 See the [contribution guide](CONTRIBUTING.md) for verification and release steps. Repository code and original examples are licensed under [GPL-3.0-only](LICENSE). See [third-party notices](THIRD_PARTY_NOTICES.md) for the engines, font, and libraries.
+
+## Keywords
+
+Codex skills, Codex Desktop, embedded score rendering, interactive sheet music, staff notation, music engraving, score annotation, music analysis, MusicXML, MEI, MIDI transcription, MuseScore, Verovio, webmscore, WebAssembly
