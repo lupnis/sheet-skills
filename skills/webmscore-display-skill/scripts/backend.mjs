@@ -62,10 +62,12 @@ function makeViews(regions, range, { systemsPerView, measuresPerView }) {
     const top = Math.min(...picked.map(region => region.y));
     const bottom = Math.max(...picked.map(region => region.bottom));
     const margin = Math.max(10, (first.picked[0].bottom - first.picked[0].y) * 0.14);
-    const before = systems[first.index - 1]?.[0];
-    const after = systems[last.index + 1]?.[0];
-    const y = before && before.bottom < top ? Math.max(top - margin, (before.bottom + top) / 2) : top - margin;
-    const endY = after && after.y > bottom ? Math.min(bottom + margin, (after.y + bottom) / 2) : bottom + margin;
+    const previous = systems[first.index - 1];
+    const next = systems[last.index + 1];
+    const previousBottom = previous ? Math.max(...previous.map(region => region.bottom)) : Infinity;
+    const nextTop = next ? Math.min(...next.map(region => region.y)) : -Infinity;
+    const upperBoundary = previousBottom < top ? (previousBottom + top) / 2 : undefined;
+    const lowerBoundary = nextTop > bottom ? (nextTop + bottom) / 2 : undefined;
     const compact = Boolean(systemsPerView || measuresPerView);
     const beginsSystem = picked[0] === systems[first.index][0];
     const endsSystem = picked.at(-1) === systems[last.index].at(-1);
@@ -74,7 +76,11 @@ function makeViews(regions, range, { systemsPerView, measuresPerView }) {
       crop: {
         x: compact && beginsSystem ? undefined : Math.min(...picked.map(region => region.x)),
         right: compact && endsSystem ? undefined : Math.max(...picked.map(region => region.right)),
-        y, bottom: endY, keepScale: compact,
+        y: Math.max(top - margin, upperBoundary ?? -Infinity),
+        bottom: Math.min(bottom + margin, lowerBoundary ?? Infinity),
+        upperGap: upperBoundary === undefined ? undefined : [previousBottom, top],
+        lowerGap: lowerBoundary === undefined ? undefined : [bottom, nextTop],
+        keepScale: compact,
       },
     };
   });

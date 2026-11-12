@@ -35,5 +35,39 @@
       return element.querySelector('.notehead use, .notehead') ?? element;
     }
 
-    return { regions, locate };
+    function fit(svg) {
+      const ink = [];
+      for (const element of music.querySelectorAll('path, use, polyline, polygon, line, rect, ellipse, circle, text')) {
+        if (element.closest('defs, .placeholder') || getComputedStyle(element).visibility !== 'visible') continue;
+        const { left, top, right, bottom, width, height } = element.getBoundingClientRect();
+        if (width || height) ink.push({ x: left, y: top, right, bottom });
+      }
+      const transform = svg.getScreenCTM()?.inverse();
+      if (!ink.length || !transform) return;
+
+      const box = combine(ink);
+      const corners = [
+        [box.x, box.y], [box.right, box.y], [box.x, box.bottom], [box.right, box.bottom],
+      ].map(([x, y]) => new DOMPoint(x, y).matrixTransform(transform));
+      const paper = svg.viewBox.baseVal;
+      const padding = Math.max(2, paper.width * 0.006);
+      const x = Math.min(paper.x, ...corners.map(point => point.x - padding));
+      const y = Math.min(paper.y, ...corners.map(point => point.y - padding));
+      const right = Math.max(paper.x + paper.width, ...corners.map(point => point.x + padding));
+      const bottom = Math.max(paper.y + paper.height, ...corners.map(point => point.y + padding));
+      const width = right - x;
+      const height = bottom - y;
+      if (x === paper.x && y === paper.y && width === paper.width && height === paper.height) return;
+
+      // Preserve the engraving's coordinate transform when the outer canvas grows.
+      if (music !== svg) {
+        const innerWidth = music.width.baseVal.value;
+        const innerHeight = music.height.baseVal.value;
+        music.setAttribute('width', innerWidth);
+        music.setAttribute('height', innerHeight);
+      }
+      svg.setAttribute('viewBox', [x, y, width, height].join(' '));
+    }
+
+    return { regions, locate, fit };
   }

@@ -193,6 +193,11 @@
     next.disabled = pageIndex === pages.length - 1;
 
     fit?.(svg);
+    if (fit && document.fonts?.status === 'loading') {
+      document.fonts.ready.then(() => {
+        if (svg.isConnected) fit(svg);
+      });
+    }
   }
 
   for (const [button, direction] of [[previous, -1], [next, 1]]) {

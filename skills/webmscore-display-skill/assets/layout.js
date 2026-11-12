@@ -2,8 +2,54 @@
     return svg;
   }
 
+  function systemBoundary(gap, graphics) {
+    if (!gap) return undefined;
+    const [top, bottom] = gap;
+    const occupied = graphics.filter(({ box }) => box.bottom > top && box.y < bottom)
+      .map(({ box }) => box)
+      .sort((a, b) => a.y - b.y);
+    let cursor = top;
+    let largest = 0;
+    let boundary = (top + bottom) / 2;
+    for (const box of [...occupied, { y: bottom, bottom }]) {
+      if (box.y - cursor > largest) {
+        largest = box.y - cursor;
+        boundary = (cursor + box.y) / 2;
+      }
+      cursor = Math.max(cursor, Math.min(box.bottom, bottom));
+    }
+    return boundary;
+  }
+
   function prepareEngraving(music, bounds, page) {
     const { regions } = page;
+    let croppedInk;
+    if (page.crop) {
+      const { x, right, upperGap, lowerGap } = page.crop;
+      const graphics = [];
+      // The Qt SVG export paints systems as flat graphics. Use the gaps between
+      // staves to find whitespace between systems and retain whole symbols.
+      for (const element of Array.from(music.children)) {
+        if (element.matches('.Page')) {
+          element.remove();
+          continue;
+        }
+        if (typeof element.getBBox !== 'function' || element.matches('defs')) continue;
+        graphics.push({ element, box: bounds(element) });
+      }
+      const upperBoundary = systemBoundary(upperGap, graphics) ?? -Infinity;
+      const lowerBoundary = systemBoundary(lowerGap, graphics) ?? Infinity;
+      const boxes = [];
+      for (const { element, box } of graphics) {
+        const center = (box.y + box.bottom) / 2;
+        if (center < upperBoundary || center >= lowerBoundary) {
+          element.remove();
+        } else if (box.right >= (x ?? -Infinity) && box.x <= (right ?? Infinity)) {
+          boxes.push(box);
+        }
+      }
+      if (boxes.length) croppedInk = combine(boxes);
+    }
     const notes = annotations.marks.some(mark => mark.note)
       ? Array.from(music.querySelectorAll('.Note'), element => ({ element, ...bounds(element) }))
       : [];
@@ -43,37 +89,38 @@
     }
 
     function fit(svg) {
-    const paper = svg.viewBox.baseVal;
-    const drawing = svg.getBBox();
-    const margin = Math.max(10, drawing.width * 0.015);
-    const paperRight = paper.x + paper.width;
-    const paperBottom = paper.y + paper.height;
-    const drawingRight = drawing.x + drawing.width;
-    const drawingBottom = drawing.y + drawing.height;
+      const paper = svg.viewBox.baseVal;
+      const drawing = svg.getBBox();
+      const margin = Math.max(10, drawing.width * 0.015);
+      const paperRight = paper.x + paper.width;
+      const paperBottom = paper.y + paper.height;
+      const drawingRight = drawing.x + drawing.width;
+      const drawingBottom = drawing.y + drawing.height;
 
-    // MuseScore keeps an oversized system together even when the requested
-    // paper cannot contain it. Extend the preview to show all engraved staves.
-    const left = drawing.x < paper.x ? drawing.x - margin : paper.x;
-    const top = drawing.y < paper.y ? drawing.y - margin : paper.y;
-    const rightEdge = drawingRight > paperRight ? drawingRight + margin : paperRight;
-    const bottomEdge = drawingBottom > paperBottom ? drawingBottom + margin : paperBottom;
+      // MuseScore keeps an oversized system together even when the requested
+      // paper cannot contain it. Extend the preview to show all engraved staves.
+      const left = drawing.x < paper.x ? drawing.x - margin : paper.x;
+      const top = drawing.y < paper.y ? drawing.y - margin : paper.y;
+      const rightEdge = drawingRight > paperRight ? drawingRight + margin : paperRight;
+      const bottomEdge = drawingBottom > paperBottom ? drawingBottom + margin : paperBottom;
 
       if (page.crop) {
-      const x = Math.max(left, page.crop.x ?? left);
-      const y = Math.max(top, page.crop.y);
-      const right = Math.min(rightEdge, page.crop.right ?? Infinity);
-      const bottom = Math.min(bottomEdge, page.crop.bottom);
-      const width = right - x;
-      if (width > 0 && bottom > y) {
-        if (page.crop.keepScale) svg.style.width = (Math.min(width / paper.width, 1) * 100) + '%';
-        svg.setAttribute('viewBox', [x, y, width, bottom - y].join(' '));
-      }
-    } else if (page.trim && drawing.width > 0 && drawing.height > 0) {
-      svg.setAttribute('viewBox', [
-        drawing.x - margin, drawing.y - margin, drawing.width + 2 * margin, drawing.height + 2 * margin,
-      ].join(' '));
-    } else if (left !== paper.x || top !== paper.y || rightEdge !== paperRight || bottomEdge !== paperBottom) {
-      svg.setAttribute('viewBox', [left, top, rightEdge - left, bottomEdge - top].join(' '));
+        const x = Math.max(left, page.crop.x ?? left);
+        const right = Math.min(rightEdge, page.crop.right ?? Infinity);
+        const padding = Math.max(10, paper.width * 0.006);
+        const y = Math.min(Math.max(top, page.crop.y), croppedInk ? croppedInk.y - padding : Infinity);
+        const bottom = Math.max(Math.min(bottomEdge, page.crop.bottom), croppedInk ? croppedInk.bottom + padding : -Infinity);
+        const width = right - x;
+        if (width > 0 && bottom > y) {
+          if (page.crop.keepScale) svg.style.width = (Math.min(width / paper.width, 1) * 100) + '%';
+          svg.setAttribute('viewBox', [x, y, width, bottom - y].join(' '));
+        }
+      } else if (page.trim && drawing.width > 0 && drawing.height > 0) {
+        svg.setAttribute('viewBox', [
+          drawing.x - margin, drawing.y - margin, drawing.width + 2 * margin, drawing.height + 2 * margin,
+        ].join(' '));
+      } else if (left !== paper.x || top !== paper.y || rightEdge !== paperRight || bottomEdge !== paperBottom) {
+        svg.setAttribute('viewBox', [left, top, rightEdge - left, bottomEdge - top].join(' '));
       }
     }
 
