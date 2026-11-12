@@ -15,7 +15,7 @@ webmscore transcribes MIDI into notation. To engrave MIDI with Verovio, first tr
 
 ## Install in Codex
 
-Once the repository is published, select the built-in `$skill-installer` skill in Codex and use either prompt:
+In Codex, select the built-in `$skill-installer` skill and use one of the prompts below.
 
 ```text
 $skill-installer help me install skills/sheet-display-skill from https://github.com/lupnis/sheet-skills using the master branch
