@@ -33,9 +33,9 @@ Provide a score path, choose a skill, and describe the passage you want to see. 
 
 > Use $sheet-display-skill to display measures 5–8 from this MusicXML file. Highlight the cadence and show its analysis when I select measure 8.
 
-> Use $webmscore-display-skill to preview the first two pages of this MIDI file, one system at a time, at most 400 pixels high.
+> Use $webmscore-display-skill to show the first two complete pages of this MIDI file. Keep all the systems on each page together.
 
-Both skills let Codex choose a display width and adjust engraving dimensions. For a compact inline preview, ask for a shorter passage or a smaller `--max-width`. With webmscore, `--systems-per-view 1 --max-height 400` fits one system at a time, even when a single measure has many staves.
+Both skills can show complete pages or short excerpts, with optional annotations in either view. Ask for a page range when page layout matters and a measure range when discussing a specific passage. With webmscore, you can also ask to read one system at a time.
 
 - [Verovio rendering and annotation reference](skills/sheet-display-skill/references/usage.md)
 - [webmscore rendering and annotation reference](skills/webmscore-display-skill/references/usage.md)

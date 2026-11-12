@@ -3,7 +3,7 @@
 For Codex Desktop, generate a fragment and embed it in the conversation using the content reference in `SKILL.md`. Set `--out` to a task-owned visualization path.
 
 ```sh
-node scripts/render.mjs score.musicxml --max-width 500 --out "<visualization-directory>/score.html"
+node scripts/render.mjs score.musicxml --pages 1 --page-width 1250 --out "<visualization-directory>/score.html"
 ```
 
 | Option | Effect |

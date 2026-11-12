@@ -16,13 +16,15 @@ Write the HTML fragment with `--out` to the task-owned visualization directory o
 
 Keep the fragment as backing content for the inline score. Provide a file link when the user asks for an export. Use `--standalone` for an explicitly requested browser-ready HTML file. If the host cannot render an interactive score inline, prefer a static inline score image when available.
 
-**Size the inline preview before rendering.** Start with `--max-width 500` for short excerpts and allow more width when dense notation needs it. Aim to keep the visible score around 400–500 CSS pixels high when practical. If a page is too tall, try a smaller display width or a shorter passage, or lower `--page-height` to fit fewer systems per page. Check that noteheads and labels remain readable. Follow an explicit user size or layout preference.
+**Choose the view from the request.** Follow explicit layout and size preferences. For a general request to show an existing score, start with a readable page view.
 
-Use the score as the primary answer. Add a title, legend, or switches when they serve the excerpt. Markings are visible by default. Use selectable measures for concise analysis.
+- **Full pages.** Select engraved pages with `--pages 1-2` and show all systems on each page at a readable width. Use the normal page dimensions for a page-based request. Set `--page-width 1250` to give a short score the standard page width when it would otherwise use automatic excerpt sizing.
+- **Excerpts.** Use `--measures 7-10` to re-engrave the relevant passage. Around `--max-width 500` can suit a short example in the flow of the conversation. Give dense notation more room when needed.
+- **Analysis.** Annotate whichever view gives the analysis enough context, including a full page when needed. Use highlights to point out the relevant music and `measureDetails` for selectable analysis. Add a title, legend, or switches when they help the reader.
 
 1. Use the user's source score when available. For a new excerpt, write valid MEI or MusicXML. For notation edits, edit the structured source so pitch, duration, voices, and relationships survive regeneration.
 2. From this skill directory, run `npm ci --ignore-scripts` once when dependencies are absent. Invoke `node scripts/render.mjs <score> --out <absolute-preview-path>.html` and add `--annotations <marks.json>` for markup. Read the [rendering and annotation reference](references/usage.md) when choosing flags or building an annotation file.
-3. Set `--measures 7-10` to re-engrave a passage and `--pages 1-2` to select pages after layout. Use `--page-width` and `--page-height` for line breaks and pagination, and `--max-width` for screen size.
+3. Use `--page-width` and `--page-height` when the task calls for different line breaks or pagination. Use `--max-width` for display size and check that noteheads and labels remain readable.
 4. If the fragment exceeds the host's inline size limit, split the requested pages across inline previews.
 
 Anchor a highlight to the smallest relevant score object. Prefer MEI element IDs for precise marks on complex or edited passages. For imported scores without stable IDs, use measure, staff, and note indices and visually check the target. Use a separate foreground color if the glyph itself should change color. Review beam grouping, cross-staff passages, complex ornaments, and import-sensitive notation against the input when they matter to the analysis.

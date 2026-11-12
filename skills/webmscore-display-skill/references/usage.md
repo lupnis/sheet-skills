@@ -3,7 +3,7 @@
 For Codex Desktop, generate a fragment and embed it in the conversation using the content reference in `SKILL.md`. Set `--out` to a task-owned visualization path.
 
 ```sh
-node scripts/render.mjs score.musicxml --systems-per-view 1 --max-height 400 --out "<visualization-directory>/score.html"
+node scripts/render.mjs score.musicxml --pages 1 --out "<visualization-directory>/score.html"
 ```
 
 | Option | Effect |
@@ -19,7 +19,7 @@ node scripts/render.mjs score.musicxml --systems-per-view 1 --max-height 400 --o
 | `--annotations file.json` | Apply the optional presentation below. |
 | `--standalone` | Export a complete offline HTML page when requested. |
 
-The renderer applies optional paper dimensions to an in-memory MuseScore copy. It then selects pages and measures, crops the engraved score into views, and applies the display caps. Use one of the two view options at a time. A single system can exceed the paper height when it contains many staves. Use `--systems-per-view 1 --max-height 400` to keep the entire system visible within the height limit.
+The renderer applies optional paper dimensions to an in-memory MuseScore copy before selecting pages or measures. `--pages` selects complete pages. For a compact preview, choose one of the two per-view options. A single system can exceed the paper height when it contains many staves. If the compact view needs a height limit, `--max-height` scales the entire system proportionally.
 
 Inputs include MuseScore MSCZ and MSCX, MusicXML and MXL, and MIDI. A MIDI import uses the engine's transcription and quantization. MuseScore 4.0.0 may render newer score features differently. Long scores may need a smaller `--pages` range for inline display. The preview uses embedded engraving vectors and omits SVG images.
 
